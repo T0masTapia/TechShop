@@ -1,7 +1,6 @@
 'use client'
 
 import { useCart } from '@/context/CartContext';
-import { productosGamer } from '@/data/mockProducts';
 import Link from 'next/link'
 
 export default function CartPage() {

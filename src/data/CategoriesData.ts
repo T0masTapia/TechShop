@@ -1,14 +1,18 @@
+export interface MenuItem {
+    name: string;
+    slug: string; 
+}
+
 export interface SubSection {
-    title: string,
-    items: string[]
+    title: string;
+    items: MenuItem[]; 
 }
 
 export interface MegaCategory {
-    name: string,
-    section: SubSection[],
-    hoverColor: string
+    name: string;
+    section: SubSection[];
+    hoverColor: string;
 }
-
 
 export const categories: MegaCategory[] = [
     {
@@ -17,26 +21,53 @@ export const categories: MegaCategory[] = [
         section: [
             {
                 title: 'Sillas y Escritorios',
-                items: ['Silla Gamer', 'Alfombra Gamer', 'Escritorio Gamer']
+                items: [
+                    
+                    { name: 'Sillas Gamer', slug: 'silla-gamer-profesional' }, 
+                    { name: 'Alfombras Gamer', slug: 'alfombras-gamer' },
+                    { name: 'Escritorios Gamer', slug: 'escritorios-gamer' }
+                ]
             },
             {
                 title: 'PC y Notebook Gamer',
-                items: ['PC Gamer', 'Notebook Gamer', 'Outlet SP Labs']
+                items: [
+                    { name: 'PC Gamer', slug: 'pc-gamer' },
+                    { name: 'Notebook Gamer', slug: 'notebook-gamer' },
+                    { name: 'Outlet SP Labs', slug: 'outlet-sp-labs' }
+                ]
             },
             {
                 title: 'Streaming',
-                items: ['WebCam', 'Microfono Streaming', 'Iluminacion', 'Accesorios Streaming']
+                items: [
+                    { name: 'WebCam', slug: 'webcam' },
+                    { name: 'Microfono Streaming', slug: 'microfonos-streaming' },
+                    { name: 'Iluminacion', slug: 'iluminacion' },
+                    { name: 'Accesorios Streaming', slug: 'accesorios-streaming' }
+                ]
             },
             {
                 title: 'Consolas y Controles',
-                items: ['Consolas y Accesorios', 'Realidad Virtual']
+                items: [
+                    { name: 'Consolas y Accesorios', slug: 'consolas-accesorios' },
+                    { name: 'Realidad Virtual', slug: 'realidad-virtual' }
+                ]
             },
         ]
     },
     {
         name: 'Periféricos',
         hoverColor: 'hover:text-cyan-400',
-        section: []
+        section: [
+            {
+                title: 'Mouses Y Teclados Gamer',
+                items: [
+                    { name: 'Mouse Gamer', slug: 'mouse-gamer' },
+                    { name: 'Teclado Gamer', slug: 'teclado-gamer' },
+                    { name: 'Mousepad Gamer', slug: 'mousepad-gamer' },
+                    {name: 'Combos Mouse/Teclado', slug: 'mouse-teclado'}
+                ]
+            }
+        ]
     },
     {
         name: 'Componentes',
