@@ -142,6 +142,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   return (
     <>
       <main className="min-h-screen bg-[#050505] text-white py-12">
+        {/* ─── CONTENEDOR CENTRADO CON MAX-WIDTH Y MX-AUTO ─── */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
           {/* Breadcrumbs */}
           <nav className="flex items-center gap-2 text-xs text-gray-500 mb-4 font-medium select-none">
             <Link href="/" className="hover:text-blue-500 transition-colors">
@@ -249,7 +252,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
             </div>
 
           </div>
-    
+
+        </div> 
+        {/* ─── CIERRE DEL CONTENEDOR CENTRADO ─── */}
       </main>
       
       <MobileFilters brands={avaliableBrands} />

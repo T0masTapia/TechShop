@@ -23,7 +23,7 @@ export const categories: MegaCategory[] = [
                 title: 'Sillas y Escritorios',
                 items: [
                     
-                    { name: 'Sillas Gamer', slug: 'silla-gamer-profesional' }, 
+                    { name: 'Sillas Gamer', slug: 'silla-gamer' }, 
                     { name: 'Alfombras Gamer', slug: 'alfombras-gamer' },
                     { name: 'Escritorios Gamer', slug: 'escritorios-gamer' }
                 ]

@@ -1,6 +1,7 @@
 // app/page.tsx
 import HeroCarousel from "@/components/HeroCarousel";
 import ProductCard from "@/components/ProductCard";
+import CarouselContainer from "@/components/CarouselContainer"; // <-- Importas aquí
 import { parseAppError } from "@/lib/errorHandler";
 import { supabase } from "@/lib/Supabase";
 import Link from "next/link";
@@ -23,22 +24,22 @@ export default async function Home() {
   const { data: mostViewedProducts, error } = await supabase
     .from('product')
     .select('*')
-    .limit(3)
+    .limit(6)
     .order('views', { ascending: false });
 
   const { data: newProducts } = await supabase
     .from('product')
     .select('*')
     .order('id', { ascending: false })
-    .limit(3);
+    .limit(12);
 
   return (
     <main className="min-h-screen bg-[#050505] text-white pb-12 sm:pb-20">
       
-      {/* 1. Carrusel Principal (Ajusta solo en móvil/tablet) */}
+      {/* 1. Carrusel Principal */}
       <HeroCarousel />
 
-      {/* 2. CONTENEDOR ENCAJONADO (max-w-7xl mx-auto centra obligatoriamente en PC) */}
+      {/* 2. CONTENEDOR ENCAJONADO */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
         {/* ─── SECCIÓN 1: LO MÁS VISTO ─── */}
@@ -57,12 +58,14 @@ export default async function Home() {
             </div>
           )}
 
-          {/* Grilla: 1 col en celular, 2 en tablet (sm), 3 en PC (lg) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
+          {/* Carrusel con flechitas */}
+          <CarouselContainer>
             {mostViewedProducts?.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <div key={product.id} className="min-w-[280px] sm:min-w-[320px] max-w-[320px] shrink-0 snap-start">
+                <ProductCard product={product} />
+              </div>
             ))}
-          </div>
+          </CarouselContainer>
 
           {mostViewedProducts?.length === 0 && !error && (
             <div className="text-center py-12 sm:py-16 border border-dashed border-gray-800 rounded-2xl">
@@ -126,11 +129,14 @@ export default async function Home() {
             <div className="h-0.5 flex-1 bg-gradient-to-r from-blue-600 to-transparent"></div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
+          {/* Carrusel con flechitas */}
+          <CarouselContainer>
             {newProducts?.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <div key={product.id} className="min-w-[280px] sm:min-w-[320px] max-w-[320px] shrink-0 snap-start">
+                <ProductCard product={product} />
+              </div>
             ))}
-          </div>
+          </CarouselContainer>
 
           {newProducts?.length === 0 && (
             <div className="text-center py-12 sm:py-16 border border-dashed border-gray-800 rounded-2xl">

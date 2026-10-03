@@ -46,52 +46,54 @@ export default function CategoryNav({ isOpenMobile = false, onCloseMobile }: Cat
                   <button
                     type="button"
                     onClick={() => toggleDropdown(idx)}
-                    className={`text-xs md:text-sm font-semibold px-3 py-1.5 rounded-lg transition-colors tracking-tight flex items-center gap-1.5 focus:outline-none ${
-                      isOpen ? 'text-white bg-gray-900/60' : `text-gray-400 ${cat.hoverColor}`
-                    }`}
+                    className={`text-xs md:text-sm font-semibold px-3 py-1.5 rounded-lg transition-colors tracking-tight flex items-center gap-1.5 focus:outline-none ${isOpen ? 'text-white bg-gray-900/60' : `text-gray-400 ${cat.hoverColor}`
+                      }`}
                   >
                     {cat.name}
                     <ChevronDown
                       size={14}
                       strokeWidth="2.5"
-                      className={`text-gray-500 transition-transform duration-300 ${
-                        isOpen ? 'rotate-180 text-white' : ''
-                      }`}
+                      className={`text-gray-500 transition-transform duration-300 ${isOpen ? 'rotate-180 text-white' : ''
+                        }`}
                     />
                   </button>
 
                   {/* Mega Menú: pegado al ras de CategoryNav con top-full */}
                   {isOpen && (
                     <>
-                      <div 
+                      <div
                         className="fixed inset-0 top-[120px] bg-black/50 z-40"
                         onClick={() => setActiveDropdown(null)}
-                      /> 
-                      
-                      <div className="absolute top-full left-0 right-0 w-full bg-[#0c0c0e] border-b border-gray-800 shadow-2xl z-50 py-8 px-6">
-                        <div className="container-page grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-y-8 gap-x-6">
+                      />
 
-                          {cat.section.map((section, secIdx) => (
-                            <div key={secIdx} className="flex flex-col gap-3 min-w-0">
-                              <h4 className="text-xs font-black text-blue-400 uppercase tracking-wider select-none">
-                                {section.title}
-                              </h4>
+                      {/* Mega Menú: contenedor a lo ancho completo */}
+                      <div className="absolute top-full left-0 right-0 w-full bg-[#0c0c0e] border-b border-gray-800 shadow-2xl z-50 py-8">
+                        {/* Contenedor centrado con max-w y mx-auto */}
+                        <div className="max-w-6xl mx-auto px-6 sm:px-8">
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-12 justify-center">
 
-                              <div className="flex flex-col gap-2">
-                                {section.items.map((item, itemIdx) => (
-                                  <Link
-                                    key={itemIdx}
-                                    href={`/search?q=${item.slug}&p=${encodeURIComponent(cat.name)}&s=${encodeURIComponent(section.title)}`}
-                                    onClick={() => setActiveDropdown(null)}
-                                    className="text-xs font-medium text-gray-400 hover:text-white transition-colors block leading-relaxed"
-                                  >
-                                    {item.name}
-                                  </Link>
-                                ))}
+                            {cat.section.map((section, secIdx) => (
+                              <div key={secIdx} className="flex flex-col gap-3 min-w-0">
+                                <h4 className="text-xs font-black text-blue-400 uppercase tracking-wider select-none">
+                                  {section.title}
+                                </h4>
+
+                                <div className="flex flex-col gap-2">
+                                  {section.items.map((item, itemIdx) => (
+                                    <Link
+                                      key={itemIdx}
+                                      href={`/search?q=${item.slug}&p=${encodeURIComponent(cat.name)}&s=${encodeURIComponent(section.title)}`}
+                                      onClick={() => setActiveDropdown(null)}
+                                      className="text-xs font-medium text-gray-400 hover:text-white transition-colors block leading-relaxed"
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            ))}
 
+                          </div>
                         </div>
                       </div>
                     </>
@@ -100,7 +102,7 @@ export default function CategoryNav({ isOpenMobile = false, onCloseMobile }: Cat
               );
             })}
 
-            <Link 
+            <Link
               href="/search?offers=true"
               className="px-3 py-1.5 text-xs md:text-sm font-bold text-blue-500 hover:text-blue-400 transition-colors tracking-tight uppercase italic flex items-center gap-1.5"
             >
@@ -114,23 +116,22 @@ export default function CategoryNav({ isOpenMobile = false, onCloseMobile }: Cat
 
       {/* ─── VISTA MÓVIL: DESPLEGABLE LATERAL (AL TOCAR HAMBURGUESA) ─── */}
       {isOpenMobile && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[99] md:hidden"
           onClick={onCloseMobile}
         />
       )}
 
-      <aside className={`fixed top-0 left-0 bottom-0 w-[85%] max-w-[320px] bg-[#0a0a0c] border-r border-gray-800 z-[100] flex flex-col justify-between transition-transform duration-300 md:hidden ${
-        isOpenMobile ? 'translate-x-0' : '-translate-x-full'
-      }`}>
+      <aside className={`fixed top-0 left-0 bottom-0 w-[85%] max-w-[320px] bg-[#0a0a0c] border-r border-gray-800 z-[100] flex flex-col justify-between transition-transform duration-300 md:hidden ${isOpenMobile ? 'translate-x-0' : '-translate-x-full'
+        }`}>
         <div className="p-5 overflow-y-auto flex-1">
-          
+
           {/* Header del Menú Móvil */}
           <div className="flex items-center justify-between border-b border-gray-800 pb-4 mb-4">
             <span className="text-sm font-black uppercase tracking-wider text-gray-300 flex items-center gap-2">
               Categorías
             </span>
-            <button 
+            <button
               onClick={onCloseMobile}
               className="p-1 text-gray-400 hover:text-white"
             >
@@ -152,9 +153,8 @@ export default function CategoryNav({ isOpenMobile = false, onCloseMobile }: Cat
                     <span>{cat.name}</span>
                     <ChevronDown
                       size={16}
-                      className={`text-gray-500 transition-transform duration-200 ${
-                        isAccordionOpen ? 'rotate-180 text-blue-400' : ''
-                      }`}
+                      className={`text-gray-500 transition-transform duration-200 ${isAccordionOpen ? 'rotate-180 text-blue-400' : ''
+                        }`}
                     />
                   </button>
 
