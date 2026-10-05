@@ -37,7 +37,6 @@ const slides = [
     subtitle: "Mouses ultraligeros con hasta 25K DPI y switches ópticos sin latencia",
     buttonText: "Ver Mouses",
     href: "/search?category=mouses",
-    // Reemplazar por la imagen de un mouse gamer
     image: "/images__1_-removebg-preview.png",
     accentColor: "text-purple-500",
     glowColor: "bg-purple-600/30",
