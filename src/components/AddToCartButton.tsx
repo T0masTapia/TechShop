@@ -47,7 +47,8 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
       image_url: product.image_url,
       slug: product.slug,
       brand: product.brand,
-    }, quantity);
+      quantity: quantity,
+    },);
 
     // Efecto visual de éxito
     setAdded(true);
