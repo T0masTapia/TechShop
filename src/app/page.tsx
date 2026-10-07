@@ -23,13 +23,13 @@ export default async function Home() {
 
   const { data: mostViewedProducts, error } = await supabase
     .from('product')
-    .select('id, name, brand, price, image_url, slug')
+    .select('id, name, brand, price, image_url, slug, stock')
     .limit(6)
     .order('views', { ascending: false });
 
   const { data: newProducts } = await supabase
     .from('product')
-    .select('id, name, brand, price, image_url, slug')
+    .select('id, name, brand, price, image_url, slug, stock')
     .order('id', { ascending: false })
     .limit(12);
 

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const router = useRouter()
-  const [isRegister, setIsRegister] = useState(false) // Alternar entre Login y Registro
+  const [isRegister, setIsRegister] = useState(false) 
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState({ type: '', text: '' })
 
