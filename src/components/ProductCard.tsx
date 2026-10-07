@@ -3,10 +3,13 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useCart } from "@/context/CartContext"; 
+import { supabase } from "@/lib/Supabase";
 
 export default function ProductCard({ product }: { product: any }) {
   const [showToast, setShowToast] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const { addToCart } = useCart();
+
 
   // Formateador para moneda chilena (remueve espacios extras para estética de UI)
   const formatter = new Intl.NumberFormat('es-CL', {
@@ -15,9 +18,17 @@ export default function ProductCard({ product }: { product: any }) {
     minimumFractionDigits: 0,
   });
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     // Evitamos que cualquier evento de click se propague hacia la tarjeta principal
     e.stopPropagation();
+
+    const {data: {user}} = await supabase.auth.getUser();
+
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+    
     addToCart(product);
     setShowToast(true);
   }
@@ -130,6 +141,51 @@ export default function ProductCard({ product }: { product: any }) {
           </button>
         </div>
       </div>
+
+      {/* ─── MODAL DE AUTENTICACIÓN (AVISO DE LOGIN) ─── */}
+      {showAuthModal && (
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-md pointer-events-auto animate-in fade-in duration-300 p-4">
+          <div className="bg-[#0b0b0f] border border-white/[0.08] text-white p-7 rounded-[28px] shadow-[0_24px_80px_rgba(0,0,0,0.9),0_0_40px_rgba(59,130,246,0.15)] flex flex-col items-center text-center max-w-sm w-full relative overflow-hidden animate-in zoom-in-95 duration-300">
+            
+            {/* Glow decorativo de fondo */}
+            <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-48 h-48 bg-blue-500/15 blur-[60px] rounded-full pointer-events-none" />
+
+            {/* Ícono de candado / usuario */}
+            <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-4 relative z-10">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+
+            <h3 className="text-xl font-bold tracking-tight mb-2 relative z-10">
+              Inicia sesión para comprar
+            </h3>
+            
+            <p className="text-sm text-gray-400 mb-6 leading-relaxed relative z-10">
+              Debes tener una cuenta activa para poder añadir productos al carrito y continuar con tu compra.
+            </p>
+
+            <div className="flex flex-col gap-2.5 w-full relative z-10">
+              <Link
+                href="/login"
+                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black uppercase tracking-widest text-[11px] py-3.5 rounded-xl transition-all active:scale-[0.98] shadow-[0_4px_20px_rgba(59,130,246,0.3)]"
+              >
+                Iniciar Sesión
+              </Link>
+              
+              <button
+                type="button"
+                onClick={() => setShowAuthModal(false)}
+                className="w-full text-gray-400 hover:text-white font-black uppercase tracking-widest text-[10px] py-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] border border-white/[0.05] transition-all active:scale-[0.98]"
+              >
+                Seguir mirando
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
       {/* TOAST MODAL DE AVISO (Estilo Glassmorphic Apple/Stripe) */}
       {showToast && (

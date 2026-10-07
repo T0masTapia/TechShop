@@ -87,7 +87,7 @@ export default async function Home() {
             
             {/* Bloque: Mouses */}
             <Link
-              href="/search?category=mouses"
+              href="/search?category=mouse-gamer"
               className="group relative md:col-span-7 h-56 sm:h-64 rounded-2xl sm:rounded-3xl border border-white/[0.04] bg-gradient-to-br from-[#0c0c0e] to-[#141419] p-6 sm:p-8 flex flex-col justify-between transition-all duration-500 hover:border-blue-500/40 shadow-xl overflow-hidden"
             >
               <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-blue-500/10 blur-3xl rounded-full group-hover:bg-blue-500/20 transition-all duration-700 pointer-events-none" />
@@ -103,7 +103,7 @@ export default async function Home() {
 
             {/* Bloque: Sillas Gamer */}
             <Link
-              href="/search?category=sillas-gamer"
+              href="/search?category=silla-gamer"
               className="group relative md:col-span-5 h-56 sm:h-64 rounded-2xl sm:rounded-3xl border border-white/[0.04] bg-gradient-to-br from-[#0c0c0e] to-[#141419] p-6 sm:p-8 flex flex-col justify-between transition-all duration-500 hover:border-purple-500/40 shadow-xl overflow-hidden"
             >
               <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-purple-500/10 blur-3xl rounded-full group-hover:bg-purple-500/20 transition-all duration-700 pointer-events-none" />
