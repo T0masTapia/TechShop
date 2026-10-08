@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { LogOut, ShoppingCart, User, Menu } from "lucide-react";
+import { LogOut, ShoppingCart, User, Menu, Package } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/lib/Supabase";
@@ -101,7 +101,7 @@ export default function Navbar({ onToggleCategoryNav }: NavbarProps) {
 
           {/* Lado Derecho: Usuario & Carrito */}
           <div className="flex items-center gap-4 sm:gap-6 flex-shrink-0">
-            {/* Usuario con icono original User(35) */}
+            {/* Usuario con menú desplegable */}
             <div className="relative">
               <Link
                 href="/login"
@@ -126,19 +126,30 @@ export default function Navbar({ onToggleCategoryNav }: NavbarProps) {
 
               {/* ─── DESPLEGABLE EN DESKTOP ─── */}
               {userName && menuOpen && (
-                <div className="hidden md:block absolute right-0 mt-2 w-44 bg-[#0c0c0e] border border-gray-800 rounded-xl shadow-2xl py-1 z-50">
+                <div className="hidden md:block absolute right-0 mt-2 w-48 bg-[#0c0c0e] border border-gray-800 rounded-xl shadow-2xl py-1.5 z-50">
+                  <Link
+                    href="/profile"
+                    onClick={() => setMenuOpen(false)}
+                    className="w-full px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition-colors flex items-center justify-center gap-2 font-medium"
+                  >
+                    <User size={17} className="text-blue-400" />
+                    <span>Mi Perfil</span>
+                  </Link>
+
+                  <div className="h-px bg-gray-800/80 my-1" />
+
                   <button
                     onClick={handleSignOut}
-                    className="w-full text-left px-4 py-2.5 text-sm text-gray-400 hover:text-red-400 hover:bg-red-950/10 gap-2 transition-colors flex items-center"
+                    className="w-full px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-950/20 transition-colors flex items-center justify-center gap-2 font-medium cursor-pointer"
                   >
-                    <LogOut size={18} />
-                    Cerrar Sesión
+                    <LogOut size={17} />
+                    <span>Cerrar Sesión</span>
                   </button>
                 </div>
               )}
             </div>
 
-            {/* Carrito con icono original ShoppingCart(30) */}
+            {/* Carrito */}
             <Link
               href="/cart"
               className="relative p-2 text-gray-400 hover:text-white transition-colors"
@@ -162,7 +173,7 @@ export default function Navbar({ onToggleCategoryNav }: NavbarProps) {
       {/* ─── LÁMINA INFERIOR MÓVIL (BOTTOM SHEET) CON Z-INDEX GLOBAL ─── */}
       {userName && menuOpen && (
         <div className="md:hidden">
-          {/* Fondo oscuro traslúcido cubriendo TODA la pantalla */}
+          {/* Fondo oscuro traslúcido */}
           <div
             className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9998]"
             onClick={() => setMenuOpen(false)}
@@ -183,6 +194,18 @@ export default function Navbar({ onToggleCategoryNav }: NavbarProps) {
                 </span>
               </div>
             </div>
+
+            {/* Enlace a Perfil en Móvil */}
+            <Link
+              href="/profile"
+              onClick={() => setMenuOpen(false)}
+              className="w-full py-3 px-4 bg-[#18181b] border border-gray-800 text-gray-200 hover:text-white rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2"
+            >
+              <Package size={18} className="text-blue-400" />
+              Mis Pedidos y Perfil
+            </Link>
+
+            {/* Cerrar Sesión en Móvil */}
             <button
               onClick={handleSignOut}
               className="w-full py-3 px-4 bg-red-950/20 border border-red-500/30 text-red-400 hover:bg-red-900/30 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2"
