@@ -236,26 +236,26 @@ export default function OrderInvoicePage() {
             </div>
           </div>
 
-          <div className="py-6">
-            <table className="w-full text-left text-xs">
+          <div className="py-6 overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-gray-800 text-[10px] uppercase font-bold text-gray-400">
-                  <th className="pb-3">Descripción</th>
-                  <th className="pb-3 text-center">Cant.</th>
-                  <th className="pb-3 text-right">P. Unitario</th>
-                  <th className="pb-3 text-right">Total</th>
+                  <th className="pb-3 pr-4">Descripción</th>
+                  <th className="pb-3 px-4 text-center w-20">Cant.</th>
+                  <th className="pb-3 px-4 text-right w-32 whitespace-nowrap">P. Unitario</th>
+                  <th className="pb-3 pl-4 text-right w-32 whitespace-nowrap">Total</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800/60">
                 {order.order_item?.map((item) => (
                   <tr key={item.id} className="text-gray-300">
-                    <td className="py-3">
+                    <td className="py-3 pr-4">
                       <span className="font-semibold block text-white">{item.product?.name || 'Producto'}</span>
                       {item.product?.brand && <span className="text-[10px] text-blue-400 uppercase font-bold">{item.product.brand}</span>}
                     </td>
-                    <td className="py-3 text-center">{item.quantity}</td>
-                    <td className="py-3 text-right font-mono">${item.price_at_purchase?.toLocaleString('es-CL')}</td>
-                    <td className="py-3 text-right font-mono font-bold text-white">
+                    <td className="py-3 px-4 text-center font-mono">{item.quantity}</td>
+                    <td className="py-3 px-4 text-right font-mono whitespace-nowrap">${item.price_at_purchase?.toLocaleString('es-CL')}</td>
+                    <td className="py-3 pl-4 text-right font-mono font-bold text-white whitespace-nowrap">
                       ${((item.price_at_purchase || 0) * (item.quantity || 1)).toLocaleString('es-CL')}
                     </td>
                   </tr>

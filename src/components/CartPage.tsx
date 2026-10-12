@@ -2,9 +2,10 @@
 
 import { useCart } from '@/context/CartContext';
 import Link from 'next/link';
+import { Plus, Minus } from 'lucide-react';
 
 export default function CartPage() {
-  const { cart, removeFromCart } = useCart();
+  const { cart, addToCart, decreaseQuantity, removeFromCart } = useCart();
 
   const cantidadProductos = cart.reduce((total, item) => total + item.quantity, 0);
   const totalDinero = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -66,19 +67,37 @@ export default function CartPage() {
                     )}
                     <h3 className="text-sm font-bold text-gray-200 truncate">{producto.name}</h3>
 
+                    {/* Elimina todas las unidades de una vez */}
                     <button
                       onClick={() => removeFromCart(producto.id)}
-                      className="text-xs text-red-500/70 hover:text-red-400 mt-2 font-bold uppercase tracking-wider transition-colors block"
+                      className="text-xs text-red-500/70 hover:text-red-400 mt-2 font-bold uppercase tracking-wider transition-colors inline-block cursor-pointer"
                     >
                       Eliminar
                     </button>
                   </div>
 
-                  <div className="text-xs text-gray-400 bg-[#121214] px-3 py-1.5 rounded border border-gray-800">
-                    Cantidad: {producto.quantity}
+                  {/* SELECTOR DE CANTIDAD (+ y -) */}
+                  <div className="flex items-center bg-[#121214] border border-gray-800 rounded-lg p-1 shrink-0">
+                    <button
+                      onClick={() => decreaseQuantity(producto.id)}
+                      className="p-1.5 text-gray-400 hover:text-white hover:bg-white/5 rounded transition-colors"
+                      title="Restar una unidad"
+                    >
+                      <Minus size={14} />
+                    </button>
+                    <span className="text-xs font-mono font-bold text-gray-200 px-3 min-w-[2rem] text-center select-none">
+                      {producto.quantity}
+                    </span>
+                    <button
+                      onClick={() => addToCart(producto, 1)}
+                      className="p-1.5 text-gray-400 hover:text-white hover:bg-white/5 rounded transition-colors"
+                      title="Sumar una unidad"
+                    >
+                      <Plus size={14} />
+                    </button>
                   </div>
 
-                  <div className="text-right flex-shrink-0">
+                  <div className="text-right flex-shrink-0 min-w-[100px]">
                     <p className="text-base font-black italic text-gray-100">
                       ${(producto.price * producto.quantity).toLocaleString('es-CL')}
                     </p>
