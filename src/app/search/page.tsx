@@ -4,7 +4,7 @@ import Brandfilter from "@/components/BrandFilter";
 import Link from "next/link";
 import PriceFilter from "@/components/PriceFilters";
 import MobileFilters from "@/components/MobileFilter";
-import ProductCard from "@/components/ProductCard"; // <-- Importa tu componente aquí
+import ProductCard from "@/components/ProductCard";
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -35,12 +35,17 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const searchTerm = params?.q || params?.category || "";
   const parentCategory = params?.p || "";
   const sectionCategory = params?.s || "";
-  const selectBrand = params?.brand || "";
+  
+  // Soportamos marcas separadas por comas (ej: "Razer,Logitech")
+  const brandParam = params?.brand || "";
+  const selectedBrands = brandParam ? brandParam.split(",").map((b) => b.trim()).filter(Boolean) : [];
+  
   const minPrice = params?.min || "";
   const maxPrice = params?.max || "";
 
   let products: Product[] = [];
   let categoryName = "Catálogo de Productos";
+  let availableBrands: string[] = [];
 
   if (searchTerm) {
     const { data: catData, error: catError } = await supabase
@@ -54,26 +59,57 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     if (catData) {
       categoryName = catData.name;
 
+      // 1. Obtenemos TODOS los productos base de esta categoría para saber qué marcas existen
+      const { data: baseProducts } = await supabase
+        .from("product")
+        .select("brand")
+        .eq("category_id", catData.id);
+
+      if (baseProducts) {
+        availableBrands = Array.from(
+          new Set(baseProducts.map((p) => p.brand).filter(Boolean))
+        ).sort();
+      }
+
+      // 2. Consulta de productos aplicando filtros
       let query = supabase
         .from("product")
         .select("*")
         .eq("category_id", catData.id);
 
-      if (selectBrand) query = query.eq("brand", selectBrand);
+      if (selectedBrands.length > 0) {
+        query = query.in("brand", selectedBrands);
+      }
       if (minPrice) query = query.gte("price", Number(minPrice));
       if (maxPrice) query = query.lte("price", Number(maxPrice));
 
       const { data: prodData } = await query;
       if (prodData) products = prodData as Product[];
+
     } else {
       categoryName = `Resultados para: "${searchTerm}"`;
 
+      // 1. Obtenemos las marcas base de la búsqueda por texto
+      const { data: baseProducts } = await supabase
+        .from("product")
+        .select("brand")
+        .or(`name.ilike.%${searchTerm.trim()}%,brand.ilike.%${searchTerm.trim()}%`);
+
+      if (baseProducts) {
+        availableBrands = Array.from(
+          new Set(baseProducts.map((p) => p.brand).filter(Boolean))
+        ).sort();
+      }
+
+      // 2. Consulta filtrada
       let query = supabase
         .from("product")
         .select("*")
         .or(`name.ilike.%${searchTerm.trim()}%,brand.ilike.%${searchTerm.trim()}%`);
 
-      if (selectBrand) query = query.eq("brand", selectBrand);
+      if (selectedBrands.length > 0) {
+        query = query.in("brand", selectedBrands);
+      }
       if (minPrice) query = query.gte("price", Number(minPrice));
       if (maxPrice) query = query.lte("price", Number(maxPrice));
 
@@ -82,19 +118,29 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       if (prodData) products = prodData as Product[];
     }
   } else {
+    // 1. Obtenemos marcas base de todo el catálogo
+    const { data: baseProducts } = await supabase
+      .from("product")
+      .select("brand");
+
+    if (baseProducts) {
+      availableBrands = Array.from(
+        new Set(baseProducts.map((p) => p.brand).filter(Boolean))
+      ).sort();
+    }
+
+    // 2. Consulta filtrada
     let query = supabase.from("product").select("*");
 
-    if (selectBrand) query = query.eq("brand", selectBrand);
+    if (selectedBrands.length > 0) {
+      query = query.in("brand", selectedBrands);
+    }
     if (minPrice) query = query.gte("price", Number(minPrice));
     if (maxPrice) query = query.lte("price", Number(maxPrice));
 
     const { data: allProducts } = await query;
     if (allProducts) products = allProducts as Product[];
   }
-
-  const avaliableBrands = Array.from(
-    new Set(products.map((p) => p.brand).filter(Boolean)),
-  ).sort() as string[];
 
   return (
     <>
@@ -154,7 +200,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 <h4 className="text-sm font-bold uppercase tracking-tight text-gray-400 select-none">
                   Marcas
                 </h4>
-                <Brandfilter brands={avaliableBrands} />
+                <Brandfilter brands={availableBrands} />
                 <PriceFilter />
               </div>
             </aside>
@@ -164,7 +210,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               {products.length === 0 ? (
                 <div className="text-center py-20 bg-[#0c0c0e] border border-gray-900 rounded-2xl">
                   <p className="text-sm text-gray-400">
-                    No se encontraron productos para: "{searchTerm}"
+                    No se encontraron productos para los filtros seleccionados.
                   </p>
                 </div>
               ) : (
@@ -179,7 +225,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         </div>
       </main>
 
-      <MobileFilters brands={avaliableBrands} />
+      <MobileFilters brands={availableBrands} />
     </>
   );
 }

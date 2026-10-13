@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/lib/Supabase";
 import { useCart } from "@/context/CartContext";
 import SearchBar from "./SearchBar";
+import ThemeToggle from "./ThemeToggle";
 
 interface NavbarProps {
   onToggleCategoryNav?: () => void;
@@ -66,29 +67,29 @@ export default function Navbar({ onToggleCategoryNav }: NavbarProps) {
   }
 
   return (
-    <nav className="bg-[#0a0a0a] border-b border-gray-800 py-3 px-4 sm:px-6 sticky top-0 z-50">
+    <nav className="bg-white dark:bg-[#0a0a0a] border-b border-gray-200 dark:border-gray-800 py-3 px-4 sm:px-6 sticky top-0 z-50 transition-colors duration-200">
       <div className="max-w-7xl mx-auto flex flex-col gap-3">
-        {/* ─── FILA SUPERIOR: Hamburguesa | Logo ────── Buscador (PC) ────── Usuario & Carrito ─── */}
+        {/* ─── FILA SUPERIOR: Hamburguesa | Logo ────── Buscador (PC) ────── Usuario, Toggle & Carrito ─── */}
         <div className="flex items-center justify-between w-full gap-4">
           {/* Lado Izquierdo: Hamburguesa (Móvil) + Separador + Logo */}
           <div className="flex items-center gap-3 flex-shrink-0">
             <button
               onClick={onToggleCategoryNav}
-              className="p-1 text-gray-300 hover:text-white transition-colors md:hidden"
+              className="p-1 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors md:hidden"
               aria-label="Abrir categorías"
             >
               <Menu size={28} />
             </button>
 
             {/* Separador estilo SP Digital en móvil */}
-            <div className="h-5 w-[1px] bg-gray-800 md:hidden" />
+            <div className="h-5 w-[1px] bg-gray-300 dark:bg-gray-800 md:hidden" />
 
             <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-900/20">
               <span className="text-white font-black text-xl">T</span>
             </div>
             <Link
               href="/"
-              className="text-white font-black text-lg sm:text-xl tracking-tight hover:text-blue-500 transition-colors"
+              className="text-gray-900 dark:text-white font-black text-lg sm:text-xl tracking-tight hover:text-blue-500 transition-colors"
             >
               Tech-Shop
             </Link>
@@ -99,8 +100,8 @@ export default function Navbar({ onToggleCategoryNav }: NavbarProps) {
             <SearchBar />
           </div>
 
-          {/* Lado Derecho: Usuario & Carrito */}
-          <div className="flex items-center gap-4 sm:gap-6 flex-shrink-0">
+          {/* Lado Derecho: Usuario, Selector de Tema & Carrito */}
+          <div className="flex items-center gap-3 sm:gap-5 flex-shrink-0">
             {/* Usuario con menú desplegable */}
             <div className="relative">
               <Link
@@ -111,14 +112,14 @@ export default function Navbar({ onToggleCategoryNav }: NavbarProps) {
                     setMenuOpen(!menuOpen);
                   }
                 }}
-                className="text-xs sm:text-sm font-medium text-gray-400 hover:text-white transition-colors flex items-center gap-1.5 py-2 px-3 rounded-lg hover:bg-gray-900/40"
+                className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-1.5 py-1.5 px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900/40"
               >
-                <User size={35} />
+                <User size={30} />
                 <span className="hidden md:flex flex-col items-start leading-tight text-left">
-                  <span className="text-[15px] text-gray-300/80 font-medium">
+                  <span className="text-[13px] text-gray-500 dark:text-gray-400 font-medium">
                     {userName ? "¡Hola!" : "Hola!"}
                   </span>
-                  <span className="text-sm font-bold text-gray-300 group-hover:text-white transition-colors">
+                  <span className="text-xs font-bold text-gray-800 dark:text-gray-200">
                     {userName ? userName : "Inicia Sesión"}
                   </span>
                 </span>
@@ -126,21 +127,21 @@ export default function Navbar({ onToggleCategoryNav }: NavbarProps) {
 
               {/* ─── DESPLEGABLE EN DESKTOP ─── */}
               {userName && menuOpen && (
-                <div className="hidden md:block absolute right-0 mt-2 w-48 bg-[#0c0c0e] border border-gray-800 rounded-xl shadow-2xl py-1.5 z-50">
+                <div className="hidden md:block absolute right-0 mt-2 w-48 bg-white dark:bg-[#0c0c0e] border border-gray-200 dark:border-gray-800 rounded-xl shadow-2xl py-1.5 z-50">
                   <Link
                     href="/profile"
                     onClick={() => setMenuOpen(false)}
-                    className="w-full px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-gray-800/60 transition-colors flex items-center justify-center gap-2 font-medium"
+                    className="w-full px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60 transition-colors flex items-center justify-center gap-2 font-medium"
                   >
-                    <User size={17} className="text-blue-400" />
+                    <User size={17} className="text-blue-500 dark:text-blue-400" />
                     <span>Mi Perfil</span>
                   </Link>
 
-                  <div className="h-px bg-gray-800/80 my-1" />
+                  <div className="h-px bg-gray-200 dark:bg-gray-800/80 my-1" />
 
                   <button
                     onClick={handleSignOut}
-                    className="w-full px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-950/20 transition-colors flex items-center justify-center gap-2 font-medium cursor-pointer"
+                    className="w-full px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors flex items-center justify-center gap-2 font-medium cursor-pointer"
                   >
                     <LogOut size={17} />
                     <span>Cerrar Sesión</span>
@@ -149,12 +150,16 @@ export default function Navbar({ onToggleCategoryNav }: NavbarProps) {
               )}
             </div>
 
+            {/* BOTÓN ALTERNADOR DE MODO CLARO / OSCURO */}
+            <ThemeToggle />
+
             {/* Carrito */}
             <Link
               href="/cart"
-              className="relative p-2 text-gray-400 hover:text-white transition-colors"
+              className="relative p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+              aria-label="Ver carrito"
             >
-              <ShoppingCart size={30} />
+              <ShoppingCart size={28} />
               {cantidadTotal > 0 && (
                 <span className="absolute -top-1 -right-1 bg-blue-600 text-[10px] text-white font-bold px-1.5 rounded-full">
                   {cantidadTotal}
@@ -170,45 +175,41 @@ export default function Navbar({ onToggleCategoryNav }: NavbarProps) {
         </div>
       </div>
 
-      {/* ─── LÁMINA INFERIOR MÓVIL (BOTTOM SHEET) CON Z-INDEX GLOBAL ─── */}
+      {/* ─── LÁMINA INFERIOR MÓVIL (BOTTOM SHEET) ─── */}
       {userName && menuOpen && (
         <div className="md:hidden">
-          {/* Fondo oscuro traslúcido */}
           <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9998]"
+            className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-md z-[9998]"
             onClick={() => setMenuOpen(false)}
           />
-          {/* Lámina desde abajo */}
-          <div className="fixed bottom-0 left-0 right-0 bg-[#0c0c0e] border-t border-gray-800 rounded-t-2xl p-6 z-[9999] flex flex-col gap-4 shadow-2xl animate-in slide-in-from-bottom duration-300">
-            <div className="w-12 h-1 bg-gray-700 rounded-full mx-auto mb-1" />
-            <div className="flex items-center gap-3 pb-3 border-b border-gray-800">
-              <div className="w-10 h-10 rounded-full bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400 font-bold">
+          <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[#0c0c0e] border-t border-gray-200 dark:border-gray-800 rounded-t-2xl p-6 z-[9999] flex flex-col gap-4 shadow-2xl animate-in slide-in-from-bottom duration-300">
+            <div className="w-12 h-1 bg-gray-300 dark:bg-gray-700 rounded-full mx-auto mb-1" />
+            <div className="flex items-center gap-3 pb-3 border-b border-gray-200 dark:border-gray-800">
+              <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-600/20 border border-blue-300 dark:border-blue-500/40 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold">
                 {userName.charAt(0).toUpperCase()}
               </div>
               <div className="flex flex-col">
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
                   Sesión iniciada como
                 </span>
-                <span className="text-sm font-bold text-white">
+                <span className="text-sm font-bold text-gray-900 dark:text-white">
                   {userName}
                 </span>
               </div>
             </div>
 
-            {/* Enlace a Perfil en Móvil */}
             <Link
               href="/profile"
               onClick={() => setMenuOpen(false)}
-              className="w-full py-3 px-4 bg-[#18181b] border border-gray-800 text-gray-200 hover:text-white rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 bg-gray-100 dark:bg-[#18181b] border border-gray-200 dark:border-gray-800 text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-white rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2"
             >
-              <Package size={18} className="text-blue-400" />
+              <Package size={18} className="text-blue-500 dark:text-blue-400" />
               Mis Pedidos y Perfil
             </Link>
 
-            {/* Cerrar Sesión en Móvil */}
             <button
               onClick={handleSignOut}
-              className="w-full py-3 px-4 bg-red-950/20 border border-red-500/30 text-red-400 hover:bg-red-900/30 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3 px-4 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-xl text-sm font-bold transition-colors flex items-center justify-center gap-2"
             >
               <LogOut size={18} />
               Cerrar Sesión

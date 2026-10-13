@@ -46,64 +46,71 @@ export default function CartPage() {
                 </Link>
               </div>
             ) : (
-              cart.map((producto) => (
-                <div
-                  key={producto.id}
-                  className="p-5 bg-[#0c0c0e] border border-gray-800 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 relative group"
-                >
-                  <div className="w-20 h-20 bg-[#121214] border border-gray-800/60 rounded-lg overflow-hidden flex items-center justify-center p-2 flex-shrink-0">
-                    <img
-                      src={producto.image_url}
-                      alt={producto.name}
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
+              cart.map((producto) => {
+                const stockDisponible = Number(producto.stock) || 0;
+                const topeAlcanzado = Number(producto.quantity) >= stockDisponible;
 
-                  <div className="flex-1 text-center sm:text-left min-w-0">
-                    {producto.brand && (
-                      <span className="text-[10px] font-bold text-blue-500 uppercase tracking-wider block mb-0.5">
-                        {producto.brand}
+                return (
+                  <div
+                    key={producto.id}
+                    className="p-5 bg-[#0c0c0e] border border-gray-800 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 relative group"
+                  >
+                    <div className="w-20 h-20 bg-[#121214] border border-gray-800/60 rounded-lg overflow-hidden flex items-center justify-center p-2 flex-shrink-0">
+                      <img
+                        src={producto.image_url}
+                        alt={producto.name}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+
+                    <div className="flex-1 text-center sm:text-left min-w-0">
+                      {producto.brand && (
+                        <span className="text-[10px] font-bold text-blue-500 uppercase tracking-wider block mb-0.5">
+                          {producto.brand}
+                        </span>
+                      )}
+                      <h3 className="text-sm font-bold text-gray-200 truncate">{producto.name}</h3>
+
+                      <button
+                        onClick={() => removeFromCart(producto.id)}
+                        className="text-xs text-red-500/70 hover:text-red-400 mt-2 font-bold uppercase tracking-wider transition-colors inline-block cursor-pointer"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+
+                    {/* SELECTOR DE CANTIDAD (+ y -) */}
+                    <div className="flex items-center bg-[#121214] border border-gray-800 rounded-lg p-1 shrink-0">
+                      <button
+                        onClick={() => decreaseQuantity(producto.id)}
+                        className="p-1.5 text-gray-400 hover:text-white hover:bg-white/5 rounded transition-colors cursor-pointer"
+                        title="Restar una unidad"
+                      >
+                        <Minus size={14} />
+                      </button>
+
+                      <span className="text-xs font-mono font-bold text-gray-200 px-3 min-w-[2rem] text-center select-none">
+                        {producto.quantity}
                       </span>
-                    )}
-                    <h3 className="text-sm font-bold text-gray-200 truncate">{producto.name}</h3>
 
-                    {/* Elimina todas las unidades de una vez */}
-                    <button
-                      onClick={() => removeFromCart(producto.id)}
-                      className="text-xs text-red-500/70 hover:text-red-400 mt-2 font-bold uppercase tracking-wider transition-colors inline-block cursor-pointer"
-                    >
-                      Eliminar
-                    </button>
-                  </div>
+                      <button
+                        onClick={() => addToCart(producto, 1)}
+                        disabled={topeAlcanzado}
+                        className="p-1.5 text-gray-400 hover:text-white hover:bg-white/5 rounded transition-colors disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer"
+                        title={topeAlcanzado ? "Stock máximo alcanzado" : "Sumar una unidad"}
+                      >
+                        <Plus size={14} />  
+                      </button>
+                    </div>
 
-                  {/* SELECTOR DE CANTIDAD (+ y -) */}
-                  <div className="flex items-center bg-[#121214] border border-gray-800 rounded-lg p-1 shrink-0">
-                    <button
-                      onClick={() => decreaseQuantity(producto.id)}
-                      className="p-1.5 text-gray-400 hover:text-white hover:bg-white/5 rounded transition-colors"
-                      title="Restar una unidad"
-                    >
-                      <Minus size={14} />
-                    </button>
-                    <span className="text-xs font-mono font-bold text-gray-200 px-3 min-w-[2rem] text-center select-none">
-                      {producto.quantity}
-                    </span>
-                    <button
-                      onClick={() => addToCart(producto, 1)}
-                      className="p-1.5 text-gray-400 hover:text-white hover:bg-white/5 rounded transition-colors"
-                      title="Sumar una unidad"
-                    >
-                      <Plus size={14} />
-                    </button>
+                    <div className="text-right flex-shrink-0 min-w-[100px]">
+                      <p className="text-base font-black italic text-gray-100">
+                        ${(producto.price * producto.quantity).toLocaleString('es-CL')}
+                      </p>
+                    </div>
                   </div>
-
-                  <div className="text-right flex-shrink-0 min-w-[100px]">
-                    <p className="text-base font-black italic text-gray-100">
-                      ${(producto.price * producto.quantity).toLocaleString('es-CL')}
-                    </p>
-                  </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
 
@@ -137,7 +144,6 @@ export default function CartPage() {
               </div>
             </div>
 
-            {/* Botón que redirige al nuevo Stepper de Checkout */}
             {cart.length > 0 ? (
               <Link
                 href="/checkout"
